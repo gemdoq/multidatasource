@@ -1,17 +1,6 @@
 server:
   port: ${TOMCAT_PORT:8080}
 spring:
-  datasource:
-    db1:
-      url: ${DB_URL1}/${DB_NAME1}
-      username: ${DB_USERNAME1}
-      password: ${DB_PASSWORD1}
-      driver-class-name: org.postgresql.Driver
-    db2:
-      url: ${DB_URL2}/${DB_NAME2}
-      username: ${DB_USERNAME2}
-      password: ${DB_PASSWORD2}
-      driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
