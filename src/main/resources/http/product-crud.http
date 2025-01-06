@@ -1,0 +1,25 @@
+### create product
+POST http://localhost:8080/api/product
+Content-Type: application/json
+
+{
+  "name": "{{name[0]}}",
+  "price": "{{price[0]}}",
+  "amount": "{{amount[0]}}"
+}
+
+### read product
+GET http://localhost:8080/api/product/1
+
+### update product
+PUT http://localhost:8080/api/product/1
+Content-Type: application/json
+
+{
+  "name": "{{name[1]}}",
+  "price": "{{price[1]}}",
+  "amount": "{{amount[1]}}"
+}
+
+### delete product
+DELETE http://localhost:8080/api/product/1

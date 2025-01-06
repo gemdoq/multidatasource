@@ -1,0 +1,23 @@
+### create provider
+POST http://localhost:8080/api/provider
+Content-Type: application/json
+
+{
+  "name": "{{name[0]}}",
+  "productId": 2
+}
+
+### read provider
+GET http://localhost:8080/api/provider/product/1
+
+### update provider
+PUT http://localhost:8080/api/provider/product/1
+Content-Type: application/json
+
+{
+  "name": "{{name[1]}}",
+  "productId": 2
+}
+
+### delete provider
+DELETE http://localhost:8080/api/provider/1

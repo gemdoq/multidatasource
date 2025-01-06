@@ -1,0 +1,23 @@
+### create productdetail
+POST http://localhost:8080/api/productdetail
+Content-Type: application/json
+
+{
+  "productId": 2,
+  "details": "{{details[4]}}"
+}
+
+### read productdetail
+GET http://localhost:8080/api/productdetail/product/2
+
+### update productdetail
+PUT http://localhost:8080/api/productdetail/product/2
+Content-Type: application/json
+
+{
+  "productId": 3,
+  "details": "{{details[2]}}"
+}
+
+### delete productdetail
+DELETE http://localhost:8080/api/productdetail/1
