@@ -6,9 +6,11 @@ import com.example.multidatasource.global.annotation.Db2Repository;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -17,6 +19,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
@@ -71,7 +75,15 @@ public class Db2Config {
 				.dataSource(dataSource)
 				.packages(DB_ENTITIES)
 				.persistenceUnit("db2")
+				.properties(jpaProperties())
 				.build();
+	}
+
+	private Map<String, Object> jpaProperties() {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put("hibernate.implicit_naming_strategy", SpringImplicitNamingStrategy.class.getName());
+		properties.put("hibernate.physical_naming_strategy", CamelCaseToUnderscoresNamingStrategy.class.getName());
+		return properties;
 	}
 
 	@Bean(name = "db2TransactionManager")
