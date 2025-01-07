@@ -3,14 +3,13 @@ package com.example.multidatasource.global.config;
 import com.example.multidatasource.domain.productdetail.model.entity.ProductdetailEntity;
 import com.example.multidatasource.domain.provider.model.entity.ProviderEntity;
 import com.example.multidatasource.global.annotation.Db2Repository;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -35,15 +34,34 @@ public class Db2Config {
 			ProductdetailEntity.class
 	};
 
-	@Bean(name = "db2DataSource")
-	public DataSource dataSource() {
-		return DataSourceBuilder.create()
-				.driverClassName("org.postgresql.Driver")
-				.url(System.getenv("DB_URL2"))
-				.username(System.getenv("DB_USERNAME2"))
-				.password(System.getenv("DB_PASSWORD2"))
-				.build();
+	// application.yml에 jdbc-url을 사용하고, hikariCP를 datasource로 사용(위 제한선 위)
+	@Bean
+	@ConfigurationProperties(prefix = "spring.datasource.db2")
+	public HikariConfig secondHikariConfig() {
+		HikariConfig config = new HikariConfig();
+		System.out.println("DB2 JDBC URL: " + config.getJdbcUrl());
+		return config;
 	}
+
+	@Bean(name = "db2DataSource")
+	public DataSource db2DataSource() {
+		HikariConfig config = secondHikariConfig();
+		System.out.println("DB2 JDBC URL in DataSource: " + config.getJdbcUrl());
+		return new HikariDataSource(config);
+	}
+	// application.yml에 jdbc-url을 사용하고, hikariCP를 datasource로 사용(아래 제한선 아래)
+
+//	// 스프링부트 기본 데이터소스 구성이 아닌 builder 패턴을 사용하여 직접 구성하는 방식(위 제한선 위)
+//	@Bean(name = "db2DataSource")
+//	public DataSource dataSource() {
+//		return DataSourceBuilder.create()
+//				.driverClassName("org.postgresql.Driver")
+//				.url(System.getenv("DB_URL2"))
+//				.username(System.getenv("DB_USERNAME2"))
+//				.password(System.getenv("DB_PASSWORD2"))
+//				.build();
+//	}
+//	// 스프링부트 기본 데이터소스 구성이 아닌 builder 패턴을 사용하여 직접 구성하는 방식(위 제한선 위)
 
 	@Bean(name = "db2EntityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
